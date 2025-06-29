@@ -1,0 +1,55 @@
+{
+  "name": "windscribe-proxy-sdk",
+  "version": "1.0.0",
+  "description": "Unofficial Windscribe proxy SDK with custom SNI support, bulk testing, and session management for Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "example:login": "node examples/login.js",
+    "example:testproxy": "node examples/testproxy.js",
+    "example:customreq": "node examples/customreq.js"
+  },
+  "keywords": [
+    "windscribe",
+    "windscribe-proxy",
+    "windscribe-server",
+    "windscribe-api",
+    "windscribe-sdk",
+    "proxy",
+    "proxy-server",
+    "proxy-client",
+    "vpn",
+    "vpn-proxy",
+    "sni",
+    "custom-sni",
+    "sni-masking",
+    "bulk-testing",
+    "proxy-testing",
+    "session-management",
+    "authentication",
+    "privacy",
+    "security",
+    "whiskergalaxy"
+  ],
+  "author": "fatih1963",
+  "license": "Apache-2.0",
+  "dependencies": {
+    "crypto": "^1.0.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fatih1963/windscribe-proxy-sdk.git"
+  },
+  "bugs": {
+    "url": "https://github.com/fatih1963/windscribe-proxy-sdk/issues"
+  },
+  "homepage": "https://github.com/fatih1963/windscribe-proxy-sdk#readme",
+  "files": [
+    "index.js",
+    "README.md",
+    "examples/"
+  ]
+}
