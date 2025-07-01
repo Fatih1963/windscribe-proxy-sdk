@@ -2,7 +2,7 @@
 
 A powerful and unofficial Node.js SDK for Windscribe proxy services featuring custom SNI support, bulk testing capabilities, and comprehensive session management.
 
-[![npm version](https://badge.fury.io/js/windscribe-proxy-sdk.svg)](https://badge.fury.io/js/windscribe-proxy-sdk)
+[![npm version](https://badge.fury.io/js/windscribe-proxy-sdk.svg)](https://www.npmjs.com/package/windscribe-proxy-sdk)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## ✨ Features
