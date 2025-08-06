@@ -1,6 +1,6 @@
 {
   "name": "windscribe-proxy-sdk",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "Unofficial Windscribe proxy SDK with custom SNI support, bulk testing, and session management for Node.js",
   "main": "index.js",
   "scripts": {
@@ -53,3 +53,4 @@
     "examples/"
   ]
 }
+
