@@ -285,7 +285,7 @@ class WindscribeSDK extends EventEmitter {
                     results.push(result.latency);
                 }
             } catch (error) {
-                
+
             }
 
             if (i < rounds - 1) {
@@ -702,11 +702,13 @@ class FakeSNIDialer {
             return new Promise((resolve, reject) => {
                 const tlsOptions = {
                     socket: socket,
-                    servername: targetHost,
+                    servername: this.sni || targetHost,
                     minVersion: 'TLSv1.2',
                     maxVersion: 'TLSv1.3',
                     ciphers: 'HIGH:!aNULL:!MD5:!RC4',
-                    rejectUnauthorized: false
+                    rejectUnauthorized: false,
+                    requestCert: false,
+                    agent: false
                 };
 
                 const tlsSocket = tls.connect(tlsOptions);
@@ -714,7 +716,7 @@ class FakeSNIDialer {
                 const tlsTimeout = setTimeout(() => {
                     tlsSocket.destroy();
                     reject(new Error('TLS handshake timed out'));
-                }, 5000);
+                }, timeout);
 
                 tlsSocket.on('error', (err) => {
                     clearTimeout(tlsTimeout);
@@ -725,6 +727,10 @@ class FakeSNIDialer {
                 tlsSocket.on('secureConnect', () => {
                     clearTimeout(tlsTimeout);
                     resolve(tlsSocket);
+                });
+
+                tlsSocket.on('close', () => {
+                    clearTimeout(tlsTimeout);
                 });
             });
         } catch (error) {
@@ -749,7 +755,7 @@ async function resolveHostname(hostname) {
                 return addresses[0];
             }
         } catch (fallbackError) {
-            
+
         }
         throw error;
     }
@@ -1021,6 +1027,9 @@ async function serverList() {
     const url = new URL(state.settings.endpoints.serverlist);
 
     const isPremium = state.isPremium ? '1' : '0';
+    if (!state.locHash) {
+        throw new Error('locHash not set. Run session() first.');
+    }
     url.pathname = `${url.pathname}/${state.settings.type}/${isPremium}/${state.locHash}`;
     url.searchParams.append('platform', state.settings.platform);
 
@@ -1215,8 +1224,11 @@ async function bulkTestProxies(proxies, options = {}) {
         customSni = null
     } = options;
 
+    // Güvenlik kontrolü: concurrency'yi güvenli bir değere zorla
+    const safeConcurrency = Math.max(1, Math.floor(Math.abs(concurrency || 1)));
+
     const results = [];
-    const semaphore = new Array(concurrency).fill(null);
+    const semaphore = new Array(safeConcurrency).fill(null);
 
     const testSingleProxy = async (proxy) => {
         const testOptions = {
@@ -1237,8 +1249,8 @@ async function bulkTestProxies(proxies, options = {}) {
         return await Promise.allSettled(promises);
     };
 
-    for (let i = 0; i < proxies.length; i += concurrency) {
-        const batch = proxies.slice(i, i + concurrency);
+    for (let i = 0; i < proxies.length; i += safeConcurrency) {
+        const batch = proxies.slice(i, i + safeConcurrency);
         const batchResults = await processBatch(batch);
 
         batchResults.forEach((result, index) => {
